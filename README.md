@@ -10,6 +10,8 @@
 
 `mkdir build`
 
+`cd build`
+
 `cmake ..`
 
 If you have MSBuild.exe installed for command line call
@@ -25,6 +27,8 @@ otherwise open NodeCode.sln in the build folder and build it with Visual Studio
 `cd NodeCode`
 
 `mkdir build`
+
+`cd build`
 
 `cmake ..`
 
