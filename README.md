@@ -14,7 +14,7 @@
 
 If you have MSBuild.exe installed for command line call
 
-`mkbuild NodeCode.sln`
+`msbuild NodeCode.sln`
 
 otherwise open NodeCode.sln in the build folder and build it with Visual Studio
 
