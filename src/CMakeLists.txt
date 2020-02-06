@@ -1,3 +1,7 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 
-add_executable(NodeCode main.cpp)
+file(GLOB NodeCodeSrc
+        *.h
+        *.cpp)
+
+add_executable(NodeCode ${NodeCodeSrc})
