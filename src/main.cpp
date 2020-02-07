@@ -1,7 +1,14 @@
+#include "core/prefix.h"
 #include <iostream>
+
+using namespace NodeCode;
 
 int main()
 {
-    std::cout << "Hello World" << std::endl;
+    Node n;
+    n.inValues.push_back(new PrimitiveValue());
+
+    n.inValues[0]->Print();
+    
     return 0;
 }
