@@ -18,10 +18,25 @@ void Addition(Node* n)
     n->outValues.push_back(r);
 }
 
+template <typename T>
+void Multiply(Node* n)
+{
+    T result;
+    result = 1;
+    const std::vector<const Value const*>& inputs = n->inValues;
+    for (auto& value : inputs)
+    {
+        result *= value->GetValue<T>();
+    }
+    Value* r = new Value("result");
+    r->SetValue<T>(result);
+    n->outValues.push_back(r);
+}
+
 int main()
 {
     Node additionNode;
-    additionNode.callback = Addition<int>;
+    additionNode.callback = Multiply<int>;
 
     Value* v1 = new Value("Value 1");
     v1->SetValue<int>(5);
