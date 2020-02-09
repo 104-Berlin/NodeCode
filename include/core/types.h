@@ -24,7 +24,7 @@ namespace NodeCode
     virtual ~Value();
 
     template<typename T>
-    void SetValue(const T& value);
+    Value* SetValue(const T& value);
 
   template <typename T>
   const T& GetValue() const 

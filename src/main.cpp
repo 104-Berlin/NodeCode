@@ -38,13 +38,8 @@ int main()
     Node additionNode;
     additionNode.callback = Multiply<int>;
 
-    Value* v1 = new Value("Value 1");
-    v1->SetValue<int>(5);
-    Value* v2 = new Value("Value 2");
-    v2->SetValue<int>(2);
-
-    additionNode.inValues.push_back(v1);
-    additionNode.inValues.push_back(v2);
+    additionNode.inValues.push_back(new Value("Value 1")->SetValue<int>(6));
+    additionNode.inValues.push_back(new Value("Value 2")->SetValue<int>(2));
 
     additionNode.Run();
 

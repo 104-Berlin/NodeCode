@@ -31,7 +31,7 @@ Value::~Value()
 }
 
 template <>
-void Value::SetValue<int>(const int& value) 
+Value* Value::SetValue<int>(const int& value) 
 {
     if (fType != EType::Int)
     {
@@ -43,10 +43,11 @@ void Value::SetValue<int>(const int& value)
         fValuePtr = new int;
     }
     *((int*) fValuePtr) = value;
+    return this;
 }
 
 template <>
-void Value::SetValue<float>(const float& value)
+Value* Value::SetValue<float>(const float& value)
 {
     if (fType != EType::Float)
     {
@@ -58,28 +59,33 @@ void Value::SetValue<float>(const float& value)
         fValuePtr = new float;
     }
     *((float*)fValuePtr) = value;
+    return this;
 }
 
 template <>
-void Value::SetValue<char>(const char& value)
+Value* Value::SetValue<char>(const char& value)
 {
 
+    return this;
 }
 
 template <>
-void Value::SetValue<double>(const double& value)
+Value* Value::SetValue<double>(const double& value)
 {
 
+    return this;
 }
 
 template <>
-void Value::SetValue<long>(const long& value)
+Value* Value::SetValue<long>(const long& value)
 {
 
+    return this;
 }
 
 template <>
-void Value::SetValue<bool>(const bool& value)
+Value* Value::SetValue<bool>(const bool& value)
 {
     
+    return this;
 }   
