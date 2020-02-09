@@ -3,12 +3,11 @@
 
 using namespace NodeCode;
 
+
 int main()
 {
-    Node n;
-    n.inValues.push_back(new Type(Int));
+    Node additionNode;
 
-    n.inValues[0]->getTypeString();
     
     return 0;
 }
