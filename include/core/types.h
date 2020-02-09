@@ -2,6 +2,7 @@
 
 namespace NodeCode
 {
+
   enum EType
   {
     Unknown,
@@ -13,12 +14,28 @@ namespace NodeCode
     Char,
     Bool
   };
-  class Type
+
+  extern EType NC_GetTypeFromTypeId(const type_info& t);
+
+  class Value
   {
   public:
-    virtual std::string getTypeString() const;
+    Value(const std::string& name);
+    virtual ~Value();
+
+    template<typename T>
+    void SetValue(const T& value);
+
+  template <typename T>
+  const T& GetValue() const 
+  {
+      return *((T*)fValuePtr);
+  }
+
   private:
+    EType fType;
     std::string fName;
+    void* fValuePtr;
   };
 
 } 

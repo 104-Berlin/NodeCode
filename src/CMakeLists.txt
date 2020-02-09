@@ -5,4 +5,4 @@ file(GLOB NodeCodeSrc
 ../include/*.h
 *.cpp)
 
-add_executable(NodeCode ${NodeCodeSrc})
+add_executable(NodeCode ${NodeCodeSrc} core/types.cpp)

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #include "types.h"
 #include "node.h"
