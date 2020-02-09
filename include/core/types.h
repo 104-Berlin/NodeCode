@@ -19,6 +19,12 @@ namespace NodeCode
   class Type
   {
   public:
+    Type(EType primitive);
+    Type(struct Struct* struc);
+    Type(Type* arrayOf);
+
+    std::string getTypeString() const;
+    std::string getPrimitiveTypeString() const;
 
   private:
     EType fType;
@@ -32,7 +38,7 @@ namespace NodeCode
 
   struct Struct
   {
-    std::vector<StructElement> fElements;
+    std::vector<struct StructElement> fElements;
   };
 
   struct StructElement
