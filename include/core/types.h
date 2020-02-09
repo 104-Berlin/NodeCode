@@ -16,28 +16,28 @@ namespace NodeCode
       Struct,
       Array
     };
-
-  class Value
+  class Type
   {
   public:
 
   private:
     EType fType;
-    Value* fValue;
-    std::vector<Value*> fArray;
-
-
+    Type* fArrayType;
+    struct Struct* fStruct;
     //Value maybe ect..
     std::string fName;
   };
 
 
 
-  struct Struct : public Value
+  struct Struct
   {
-    private:
-    std::vector<Value> fValues;
-    std::string fObjectName;
+    std::vector<StructElement> fElements;
   };
 
-}
+  struct StructElement
+  {
+    std::string fName;
+    Type* fType;
+  };
+} 
