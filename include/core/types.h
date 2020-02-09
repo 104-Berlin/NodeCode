@@ -15,8 +15,6 @@ namespace NodeCode
     Bool
   };
 
-  extern EType NC_GetTypeFromTypeId(const type_info& t);
-
   class Value
   {
   public:
@@ -26,11 +24,11 @@ namespace NodeCode
     template<typename T>
     Value* SetValue(const T& value);
 
-  template <typename T>
-  const T& GetValue() const 
-  {
-      return *((T*)fValuePtr);
-  }
+    template <typename T>
+    const T& GetValue() const 
+    {
+        return *((T*)fValuePtr);
+    }
 
   private:
     EType fType;

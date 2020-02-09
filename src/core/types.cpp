@@ -2,18 +2,6 @@
 
 using namespace NodeCode;
 
-EType NC_GetTypeFromTypeId(const type_info& t)
-{
-    if (t == typeid(int))           return EType::Int;
-    else if (t == typeid(float))    return EType::Float;
-    else if (t == typeid(double))   return EType::Double;
-    else if (t == typeid(long))     return EType::Long;
-    else if (t == typeid(char))     return EType::Char;
-    else if (t == typeid(bool))     return EType::Bool;
-
-    return EType::Unknown;
-}
-
 
 Value::Value(const std::string& name)
     : fName(name), fType(EType::Unknown), fValuePtr(nullptr)
@@ -65,27 +53,63 @@ Value* Value::SetValue<float>(const float& value)
 template <>
 Value* Value::SetValue<char>(const char& value)
 {
-
+    if (fType != EType::Char)
+    {
+        fType = EType::Char;
+        if (fValuePtr) {
+            delete fValuePtr;
+            fValuePtr = nullptr;
+        }
+        fValuePtr = new char;
+    }
+    *((char*)fValuePtr) = value;
     return this;
 }
 
 template <>
 Value* Value::SetValue<double>(const double& value)
 {
-
+    if (fType != EType::Double)
+    {
+        fType = EType::Double;
+        if (fValuePtr) {
+            delete fValuePtr;
+            fValuePtr = nullptr;
+        }
+        fValuePtr = new double;
+    }
+    *((double*)fValuePtr) = value;    
     return this;
 }
 
 template <>
 Value* Value::SetValue<long>(const long& value)
 {
-
+    if (fType != EType::Long)
+    {
+        fType = EType::Long;
+        if (fValuePtr) {
+            delete fValuePtr;
+            fValuePtr = nullptr;
+        }
+        fValuePtr = new long;
+    }
+    *((long*)fValuePtr) = value;    
     return this;
 }
 
 template <>
 Value* Value::SetValue<bool>(const bool& value)
 {
-    
+    if (fType != EType::Bool)
+    {
+        fType = EType::Bool;
+        if (fValuePtr) {
+            delete fValuePtr;
+            fValuePtr = nullptr;
+        }
+        fValuePtr = new bool;
+    }
+    *((bool*)fValuePtr) = value;    
     return this;
 }   
