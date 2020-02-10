@@ -45,5 +45,5 @@ namespace NodeCode
       void setEvaluated();
   };
 
-  std::string NCgetCCodeFromNodes(std::vector<NodeInstance*> nodes);
+  std::string NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes);
 }

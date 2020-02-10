@@ -37,17 +37,33 @@ int main()
 
     CNode additionNode = CNode(in,out,cParts,fill);
 
-    ConstNode int3 = ConstNode(tInt, "3");
+    std::vector<std::string> mParts;
+    mParts.push_back("");
+    mParts.push_back("=");
+    mParts.push_back("*");
+    mParts.push_back(";\n");
 
-    NodeInstance cNode = NodeInstance(&int3);
+    CNode multiplicationNode = CNode(in,out,mParts,fill);
+
+    ConstNode int3 = ConstNode(tInt, "3");
+    ConstNode int5 = ConstNode(tInt, "5");
+
+    NodeInstance c3Node = NodeInstance(&int3);
+    NodeInstance c5Node = NodeInstance(&int5);
     NodeInstance addNode = NodeInstance(&additionNode);
-    addNode.connectWith("in 1", &cNode, "out");
-    addNode.connectWith("in 2", &cNode, "out");
+    NodeInstance mulNode = NodeInstance(&multiplicationNode);
+
+    addNode.connectWith("in 1", &c3Node, "out");
+    addNode.connectWith("in 2", &c5Node, "out");
+    mulNode.connectWith("in 1", &addNode, "out");
+    mulNode.connectWith("in 2", &c3Node, "out");
 
     std::vector<NodeInstance*> nodes;
-    nodes.push_back(&cNode);
+    nodes.push_back(&mulNode);
     nodes.push_back(&addNode);
+    nodes.push_back(&c3Node);
+    nodes.push_back(&c5Node);
 
-    std::cout << NCgetCCodeFromNodes(nodes) << std::endl;
+    std::cout << NC_getCCodeFromNodes(nodes) << std::endl;
     return 0;
 }

@@ -77,9 +77,9 @@ bool NodeInstance::connectWith(std::string inName, NodeInstance* prevNode, std::
 }
 
 bool NodeInstance::canBeEvaluated() {
-  for(Connection* con : fIns){
-    if(con == nullptr) continue;
-    if(!con->fHasVal) return false;
+  for(size_t i = 0; i < fIns.size(); i++){
+    if(fIns[i] == nullptr) continue;
+    if(!fIns[i]->fHasVal) return false;
   }
   return true;
 }
@@ -94,12 +94,13 @@ std::string NodeInstance::getCode() {
 }
 
 void NodeInstance::setEvaluated() {
-  for(Connection& out : fOuts) {
-    out.fHasVal = true;
+  for (size_t i = 0; i < fOuts.size(); i++)
+  {
+    fOuts[i].fHasVal = true;
   }
 }
 
-std::string NodeCode::NCgetCCodeFromNodes(std::vector<NodeInstance*> nodes) {
+std::string NodeCode::NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes) {
   std::string res = "";
   size_t i = 0;
   while (i < nodes.size()) {
