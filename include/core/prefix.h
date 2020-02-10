@@ -7,4 +7,5 @@
 #include <iostream>
 
 #include "types.h"
+#include "connection.h"
 #include "node.h"

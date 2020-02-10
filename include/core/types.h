@@ -16,9 +16,17 @@ namespace NodeCode
   class Type
   {
   public:
-    virtual std::string getTypeString() const;
+    virtual std::string getCType()=0;
+    //virtual std::string getTypeString() const;
   private:
     std::string fName;
   };
 
+  class PrimitiveType : public Type {
+  private:
+    EType fPrimitive;
+  public:
+    PrimitiveType(EType type);
+    std::string getCType();
+  };
 } 
