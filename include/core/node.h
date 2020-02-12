@@ -32,14 +32,32 @@ namespace NodeCode
       std::string getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs);
   };
 
+  class FunctionNode : public Node {
+    private:
+      std::vector<NodeInstance*> fInnerNodes;
+      std::vector<Connection*> fOutConnections;
+      std::string fName;
+
+      static size_t fIndex;
+    public:
+      std::vector<Connection> fInConnections;
+      FunctionNode(std::vector<NodeInOut> in, std::vector<NodeInstance*> innerNodes, std::vector<NodeInOut> out);
+      std::string getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs);
+      std::string getFunctionCode();
+      std::string getName();
+      bool connectWith(std::string funcOut, NodeInstance* node, std::string nodeOut);
+  };
+
   class NodeInstance {
     private:
-      Node* fNode;
       std::vector<Connection*> fIns;
-      std::vector<Connection> fOuts;
     public:
+      std::vector<Connection> fOuts;
+      Node* fNode;
       NodeInstance(Node* node);
+      bool connectWith(std::string inName, FunctionNode* funcNode, std::string funcIn);
       bool connectWith(std::string inName, NodeInstance* prevNode, std::string outName);
+      Connection* getOut(std::string outName);
       bool canBeEvaluated();
       std::string getCode();
       void setEvaluated();

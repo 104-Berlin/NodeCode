@@ -12,6 +12,7 @@ namespace NodeCode {
       static size_t cIndex;
     public:
       bool fHasVal;
+      Connection();
       Connection(NodeInstance* origin);
       bool addEndpoint(NodeInstance* endpoint);
       std::string getVarName();

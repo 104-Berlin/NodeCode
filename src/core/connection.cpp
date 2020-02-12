@@ -4,6 +4,10 @@ using namespace NodeCode;
 
 size_t Connection::cIndex = 0;
 
+Connection::Connection(){
+  *this = Connection(nullptr);
+}
+
 Connection::Connection(NodeInstance* origin){
   fHasVal = false;
   fVarName = "";
