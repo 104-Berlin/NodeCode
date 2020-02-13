@@ -178,17 +178,14 @@ bool NodeInstance::connectWith(std::string inName, NodeInstance* prevNode,
 }
 
 bool NodeInstance::canBeEvaluated() {
-  // log("eval?");
   for (size_t i = 0; i < fIns.size(); i++) {
     if (fIns[i] == nullptr) {
       continue;
     }
     if (!fIns[i]->fHasVal) {
-      // log("no val");
       return false;
     }
   }
-  // log("eval!");
   return true;
 }
 

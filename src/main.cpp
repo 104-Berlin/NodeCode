@@ -82,6 +82,7 @@ int main() {
   nodes.push_back(mulNode);
   nodes.push_back(addNode);
 
+  // prepare function node
   std::vector<NodeInOut> fIn;
   fIn.push_back(i1);
 
@@ -89,18 +90,24 @@ int main() {
   fOut.push_back(o);
 
   FunctionNode fNode = FunctionNode(fIn, nodes, fOut);
+
+  // connect function body with function node
   addNode->connectWith("in 1", &fNode, "in 1");
   fNode.connectWith("out", mulNode, "out");
 
+  // create main nodes
   NodeInstance main5 = NodeInstance(&int5);
   NodeInstance fInst = NodeInstance(&fNode);
+  NodeInstance fIns2 = NodeInstance(&fNode);
   NodeInstance pInst = NodeInstance(&printNode);
   fInst.connectWith("in 1", &main5, "out");
-  pInst.connectWith("in 1", &fInst, "out");
+  fIns2.connectWith("in 1", &fInst, "out");
+  pInst.connectWith("in 1", &fIns2, "out");
 
   std::vector<NodeInstance*> mainProg;
-  mainProg.push_back(&fInst);
   mainProg.push_back(&main5);
+  mainProg.push_back(&fInst);
+  mainProg.push_back(&fIns2);
   mainProg.push_back(&pInst);
 
   std::vector<FunctionNode*> funcs;
@@ -110,6 +117,9 @@ int main() {
   cnodes.push_back(&printNode);
   cnodes.push_back(&additionNode);
   cnodes.push_back(&multiplicationNode);
+
+  CLI cli = CLI();
+  cli.run();
 
   NC_compileAndRun(mainProg, funcs, cnodes);
   return 0;

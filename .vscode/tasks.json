@@ -44,7 +44,7 @@
     {
       "label": "build debug",
       "type": "shell",
-      "command": "cd build && cmake -D CMAKE_BUILD_TYPE=Debug .. && cmake --build .",
+      "command": "cd build && rm -rf ./* && cmake -D CMAKE_CXX_COMPILER=g++ -D CMAKE_BUILD_TYPE=Debug .. && cmake --build .",
       "presentation": {
         "echo": true,
         "reveal": "always",

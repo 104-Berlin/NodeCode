@@ -7,7 +7,9 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
+#include <map>
 
 #include "types.h"
 #include "connection.h"
 #include "node.h"
+#include "cli.h"
