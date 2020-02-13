@@ -64,5 +64,10 @@
     "fstream": "cpp",
     "iomanip": "cpp",
     "stack": "cpp"
+  },
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "editor.defaultFormatter": "ms-vscode.cpptools",
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
   }
 }

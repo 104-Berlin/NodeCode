@@ -2,18 +2,18 @@
 
 using namespace NodeCode;
 
-CNode::CNode(std::vector<NodeInOut> in, std::vector<NodeInOut> out, std::vector<std::string> cParts, std::vector<std::string> filler){
+CNode::CNode(std::vector<NodeInOut> in, std::vector<NodeInOut> out,
+             std::vector<std::string> cParts, std::vector<std::string> filler) {
   fInputs = in;
   fOutputs = out;
   fCParts = cParts;
   fFiller = filler;
 }
 
-int getIndex(std::vector<NodeInOut> v, std::string nIO){
+int getIndex(std::vector<NodeInOut> v, std::string nIO) {
   int res = -1;
-  for (size_t i = 0; i < v.size(); i++)
-  {
-    if(v[i].fName == nIO){
+  for (size_t i = 0; i < v.size(); i++) {
+    if (v[i].fName == nIO) {
       res = i;
       break;
     }
@@ -21,23 +21,21 @@ int getIndex(std::vector<NodeInOut> v, std::string nIO){
   return res;
 }
 
-void log(std::string msg) {
-  std::cout << msg << std::endl;
-}
+void log(std::string msg) { std::cout << msg << std::endl; }
 
-std::string CNode::getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs){
+std::string CNode::getCCode(std::vector<Connection*> inputs,
+                            std::vector<Connection> outputs) {
   std::string res = "";
-  for (size_t i = 0; i < fCParts.size(); i++)
-  {
+  for (size_t i = 0; i < fCParts.size(); i++) {
     res = res + fCParts[i];
-    if(fFiller.size() > i){
+    if (fFiller.size() > i) {
       std::string io = fFiller[i];
       int inIndex = getIndex(fInputs, io);
-      if(inIndex != -1){
+      if (inIndex != -1) {
         res = res + inputs[inIndex]->getVarName();
       }
       int outIndex = getIndex(fOutputs, io);
-      if(outIndex != -1){
+      if (outIndex != -1) {
         res = res + outputs[outIndex].getVarName();
       }
     }
@@ -45,15 +43,11 @@ std::string CNode::getCCode(std::vector<Connection*> inputs, std::vector<Connect
   return res;
 }
 
-void CNode::addInclude(std::string include) {
-  fIncludes.push_back(include);
-}
+void CNode::addInclude(std::string include) { fIncludes.push_back(include); }
 
-std::vector<std::string> CNode::getIncludes() {
-  return fIncludes;
-}
+std::vector<std::string> CNode::getIncludes() { return fIncludes; }
 
-ConstNode::ConstNode(Type* type, std::string cVal){
+ConstNode::ConstNode(Type* type, std::string cVal) {
   fType = type;
   fCVal = cVal;
   struct NodeInOut io;
@@ -62,11 +56,14 @@ ConstNode::ConstNode(Type* type, std::string cVal){
   fOutputs.push_back(io);
 }
 
-std::string ConstNode::getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs){
+std::string ConstNode::getCCode(std::vector<Connection*> inputs,
+                                std::vector<Connection> outputs) {
   return outputs[0].getVarName() + "=" + fCVal + ";\n";
 }
 
-FunctionNode::FunctionNode(std::vector<NodeInOut> in, std::vector<NodeInstance*> innerNodes, std::vector<NodeInOut> out){
+FunctionNode::FunctionNode(std::vector<NodeInOut> in,
+                           std::vector<NodeInstance*> innerNodes,
+                           std::vector<NodeInOut> out) {
   for (size_t i = 0; i < in.size(); i++) {
     fInputs.push_back(in[i]);
     fInConnections.push_back(Connection());
@@ -82,7 +79,7 @@ FunctionNode::FunctionNode(std::vector<NodeInOut> in, std::vector<NodeInstance*>
 size_t FunctionNode::fIndex = 0;
 
 std::string FunctionNode::getName() {
-  if(fName == "") {
+  if (fName == "") {
     fName = "function_" + std::to_string(fIndex++);
   }
   return fName;
@@ -90,128 +87,130 @@ std::string FunctionNode::getName() {
 
 std::string FunctionNode::getFunctionCode() {
   std::string res = "void";
-  res += " "+ getName() + "(";
+  res += " " + getName() + "(";
 
   bool hasInputs = false;
-  for (size_t i = 0; i < fInputs.size(); i++)
-  {
-    if(i != 0) res += ", ";
+  for (size_t i = 0; i < fInputs.size(); i++) {
+    if (i != 0) res += ", ";
     res += fInputs[i].type->getCType() + " " + fInConnections[i].getVarName();
     fInConnections[i].fHasVal = true;
     hasInputs = true;
   }
-  for (size_t i = 0; i < fOutputs.size(); i++)
-  {
-    if(i != 0 || hasInputs) res += ", ";
-    res += fOutputs[i].type->getCType() + "* " + fOutConnections[i]->getVarName()+"_out";
+  for (size_t i = 0; i < fOutputs.size(); i++) {
+    if (i != 0 || hasInputs) res += ", ";
+    res += fOutputs[i].type->getCType() + "* " +
+           fOutConnections[i]->getVarName() + "_out";
   }
   res += ") {\n";
 
   res += NC_getCCodeFromNodes(fInnerNodes);
 
   for (size_t i = 0; i < fOutConnections.size(); i++) {
-    res += "*" + fOutConnections[i]->getVarName() + "_out=" + fOutConnections[i]->getVarName() + ";\n";
+    res += "*" + fOutConnections[i]->getVarName() +
+           "_out=" + fOutConnections[i]->getVarName() + ";\n";
   }
 
   res += "}\n";
   return res;
 }
 
-std::string FunctionNode::getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs) {
+std::string FunctionNode::getCCode(std::vector<Connection*> inputs,
+                                   std::vector<Connection> outputs) {
   std::string res = "";
   res += getName() + "(";
 
   bool hasInputs = false;
-  for (size_t i = 0; i < inputs.size(); i++)
-  {
-    if(i != 0) res += ", ";
+  for (size_t i = 0; i < inputs.size(); i++) {
+    if (i != 0) res += ", ";
     res += inputs[i]->getVarName();
     hasInputs = true;
   }
-  for (size_t i = 0; i < outputs.size(); i++)
-  {
-    if(i != 0 || hasInputs) res += ", ";
+  for (size_t i = 0; i < outputs.size(); i++) {
+    if (i != 0 || hasInputs) res += ", ";
     res += "&" + outputs[i].getVarName();
   }
   res += ");\n";
   return res;
 }
 
-bool FunctionNode::connectWith(std::string funcOut, NodeInstance* node, std::string nodeOut) {
+bool FunctionNode::connectWith(std::string funcOut, NodeInstance* node,
+                               std::string nodeOut) {
   int fOutIndex = getIndex(fOutputs, funcOut);
-  if(fOutIndex == -1) return false;
+  if (fOutIndex == -1) return false;
   int outIndex = getIndex(node->fNode->fOutputs, nodeOut);
-  if(outIndex == -1) return false;
+  if (outIndex == -1) return false;
   fOutConnections[fOutIndex] = &node->fOuts[outIndex];
   return true;
 }
 
-NodeInstance::NodeInstance(Node* node){
+NodeInstance::NodeInstance(Node* node) {
   fNode = node;
   fIns = std::vector<Connection*>();
   fOuts = std::vector<Connection>();
-  for(size_t i = 0; i < node->fInputs.size(); i++){
+  for (size_t i = 0; i < node->fInputs.size(); i++) {
     fIns.push_back(nullptr);
   }
-  for(size_t i = 0; i < node->fOutputs.size(); i++){
+  for (size_t i = 0; i < node->fOutputs.size(); i++) {
     fOuts.push_back(Connection(this));
   }
 }
 
-bool NodeInstance::connectWith(std::string inName, FunctionNode* funcNode, std::string funcIn){
+bool NodeInstance::connectWith(std::string inName, FunctionNode* funcNode,
+                               std::string funcIn) {
   int inIndex = getIndex(fNode->fInputs, inName);
-  if(inIndex == -1) return false;
-  int fInIndex = getIndex(funcNode->fInputs,funcIn);
-  if(fInIndex == -1) return false;
+  if (inIndex == -1) return false;
+  int fInIndex = getIndex(funcNode->fInputs, funcIn);
+  if (fInIndex == -1) return false;
   fIns[inIndex] = &funcNode->fInConnections[fInIndex];
   funcNode->fInConnections[fInIndex].addEndpoint(this);
   return true;
 }
 
-bool NodeInstance::connectWith(std::string inName, NodeInstance* prevNode, std::string outName){
+bool NodeInstance::connectWith(std::string inName, NodeInstance* prevNode,
+                               std::string outName) {
   int outIndex = getIndex(prevNode->fNode->fOutputs, outName);
-  if(outIndex == -1) return false;
+  if (outIndex == -1) return false;
   int inIndex = getIndex(fNode->fInputs, inName);
-  if(inIndex == -1) return false;
+  if (inIndex == -1) return false;
   fIns[inIndex] = &prevNode->fOuts[outIndex];
   prevNode->fOuts[outIndex].addEndpoint(this);
   return true;
 }
 
 bool NodeInstance::canBeEvaluated() {
-  //log("eval?");
-  for(size_t i = 0; i < fIns.size(); i++){
-    if(fIns[i] == nullptr) {
+  // log("eval?");
+  for (size_t i = 0; i < fIns.size(); i++) {
+    if (fIns[i] == nullptr) {
       continue;
     }
-    if(!fIns[i]->fHasVal) {
-      //log("no val");
+    if (!fIns[i]->fHasVal) {
+      // log("no val");
       return false;
     }
   }
-  //log("eval!");
+  // log("eval!");
   return true;
 }
 
 std::string NodeInstance::getCode() {
   std::string res = "";
-  for(size_t i = 0; i < fOuts.size(); i++){
-    res += fNode->fOutputs[i].type->getCType() + " " + fOuts[i].getVarName() + ";\n";
+  for (size_t i = 0; i < fOuts.size(); i++) {
+    res += fNode->fOutputs[i].type->getCType() + " " + fOuts[i].getVarName() +
+           ";\n";
   }
   res += fNode->getCCode(fIns, fOuts);
   return res;
 }
 
 void NodeInstance::setEvaluated() {
-  for (size_t i = 0; i < fOuts.size(); i++)
-  {
+  for (size_t i = 0; i < fOuts.size(); i++) {
     fOuts[i].fHasVal = true;
   }
 }
 
 Connection* NodeInstance::getOut(std::string outName) {
   int outIndex = getIndex(fNode->fOutputs, outName);
-  if(outIndex == -1) return nullptr;
+  if (outIndex == -1) return nullptr;
   return &fOuts[outIndex];
 }
 
@@ -219,10 +218,10 @@ std::string NodeCode::NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes) {
   std::string res = "";
   size_t i = 0;
   while (i < nodes.size()) {
-    if(nodes[i] != nullptr && nodes[i]->canBeEvaluated()){
+    if (nodes[i] != nullptr && nodes[i]->canBeEvaluated()) {
       res += nodes[i]->getCode();
       nodes[i]->setEvaluated();
-      nodes.erase(nodes.begin()+i);
+      nodes.erase(nodes.begin() + i);
       i = 0;
       continue;
     }
@@ -232,29 +231,28 @@ std::string NodeCode::NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes) {
 }
 
 void addUnique(std::vector<std::string>& strings, std::string newString) {
-  if(std::find(strings.begin(),strings.end(),newString) == strings.end()){
+  if (std::find(strings.begin(), strings.end(), newString) == strings.end()) {
     strings.push_back(newString);
   }
 }
 
-std::string NodeCode::NC_getCProg(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes) {
+std::string NodeCode::NC_getCProg(std::vector<NodeInstance*> main,
+                                  std::vector<FunctionNode*> funcs,
+                                  std::vector<CNode*> cNodes) {
   std::vector<std::string> includes;
   for (size_t i = 0; i < cNodes.size(); i++) {
     std::vector<std::string> newIncs = cNodes[i]->getIncludes();
-    for (size_t j = 0; j < newIncs.size(); j++)
-    {
+    for (size_t j = 0; j < newIncs.size(); j++) {
       addUnique(includes, newIncs[j]);
     }
   }
 
   std::string res = "";
-  for (size_t i = 0; i < includes.size(); i++)
-  {
-    res += "#include <"+includes[i]+">\n";  
+  for (size_t i = 0; i < includes.size(); i++) {
+    res += "#include <" + includes[i] + ">\n";
   }
-  
-  for (size_t i = 0; i < funcs.size(); i++)
-  {
+
+  for (size_t i = 0; i < funcs.size(); i++) {
     res += funcs[i]->getFunctionCode();
   }
   res += "int main() {\n";
@@ -265,11 +263,13 @@ std::string NodeCode::NC_getCProg(std::vector<NodeInstance*> main, std::vector<F
   return res;
 }
 
-void NodeCode::NC_compileAndRun(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes){
+void NodeCode::NC_compileAndRun(std::vector<NodeInstance*> main,
+                                std::vector<FunctionNode*> funcs,
+                                std::vector<CNode*> cNodes) {
   std::ofstream outFile;
   outFile.open("out.c");
   outFile.clear();
   outFile << NC_getCProg(main, funcs, cNodes);
   outFile.close();
-  execlp("gcc", "gcc","./out.c","-o","out");
+  execlp("gcc", "gcc", "./out.c", "-o", "out");
 }

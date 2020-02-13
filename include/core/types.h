@@ -1,32 +1,30 @@
 #pragma once
 
-namespace NodeCode
-{
-  enum EType
-  {
-    Unknown,
+namespace NodeCode {
+enum EType {
+  Unknown,
 
-    Int,
-    Float,
-    Double,
-    Long,
-    Char,
-    Bool
-  };
-  class Type
-  {
-  public:
-    virtual std::string getCType()=0;
-    //virtual std::string getTypeString() const;
-  private:
-    std::string fName;
-  };
+  Int,
+  Float,
+  Double,
+  Long,
+  Char,
+  Bool
+};
+class Type {
+ public:
+  virtual std::string getCType() = 0;
+  // virtual std::string getTypeString() const;
+ private:
+  std::string fName;
+};
 
-  class PrimitiveType : public Type {
-  private:
-    EType fPrimitive;
-  public:
-    PrimitiveType(EType type);
-    std::string getCType();
-  };
-} 
+class PrimitiveType : public Type {
+ private:
+  EType fPrimitive;
+
+ public:
+  PrimitiveType(EType type);
+  std::string getCType();
+};
+}  // namespace NodeCode

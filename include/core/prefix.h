@@ -7,7 +7,6 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include <stdlib.h>
 
 #include "types.h"
 #include "connection.h"
