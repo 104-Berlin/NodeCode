@@ -45,6 +45,14 @@ std::string CNode::getCCode(std::vector<Connection*> inputs, std::vector<Connect
   return res;
 }
 
+void CNode::addInclude(std::string include) {
+  fIncludes.push_back(include);
+}
+
+std::vector<std::string> CNode::getIncludes() {
+  return fIncludes;
+}
+
 ConstNode::ConstNode(Type* type, std::string cVal){
   fType = type;
   fCVal = cVal;
@@ -125,7 +133,7 @@ std::string FunctionNode::getCCode(std::vector<Connection*> inputs, std::vector<
     if(i != 0 || hasInputs) res += ", ";
     res += "&" + outputs[i].getVarName();
   }
-  res += ");";
+  res += ");\n";
   return res;
 }
 
@@ -221,4 +229,47 @@ std::string NodeCode::NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes) {
     i++;
   }
   return res;
+}
+
+void addUnique(std::vector<std::string>& strings, std::string newString) {
+  if(std::find(strings.begin(),strings.end(),newString) == strings.end()){
+    strings.push_back(newString);
+  }
+}
+
+std::string NodeCode::NC_getCProg(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes) {
+  std::vector<std::string> includes;
+  for (size_t i = 0; i < cNodes.size(); i++) {
+    std::vector<std::string> newIncs = cNodes[i]->getIncludes();
+    for (size_t j = 0; j < newIncs.size(); j++)
+    {
+      addUnique(includes, newIncs[j]);
+    }
+  }
+
+  std::string res = "";
+  for (size_t i = 0; i < includes.size(); i++)
+  {
+    res += "#include <"+includes[i]+">\n";  
+  }
+  
+  for (size_t i = 0; i < funcs.size(); i++)
+  {
+    res += funcs[i]->getFunctionCode();
+  }
+  res += "int main() {\n";
+
+  res += NC_getCCodeFromNodes(main);
+
+  res += "return 0;\n}\n";
+  return res;
+}
+
+void NodeCode::NC_compileAndRun(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes){
+  std::ofstream outFile;
+  outFile.open("out.c");
+  outFile.clear();
+  outFile << NC_getCProg(main, funcs, cNodes);
+  outFile.close();
+  execlp("gcc", "gcc","./out.c","-o","out");
 }

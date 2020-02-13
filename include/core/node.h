@@ -18,9 +18,12 @@ namespace NodeCode
     private:
       std::vector<std::string> fCParts;
       std::vector<std::string> fFiller;
+      std::vector<std::string> fIncludes;
     public:
       CNode(std::vector<NodeInOut> in, std::vector<NodeInOut> out, std::vector<std::string> cParts, std::vector<std::string> filler);
       std::string getCCode(std::vector<Connection*> inputs, std::vector<Connection> outputs);
+      void addInclude(std::string include);
+      std::vector<std::string> getIncludes();
   };
 
   class ConstNode : public Node {
@@ -64,4 +67,6 @@ namespace NodeCode
   };
 
   std::string NC_getCCodeFromNodes(std::vector<NodeInstance*> nodes);
+  std::string NC_getCProg(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes);
+  void NC_compileAndRun(std::vector<NodeInstance*> main, std::vector<FunctionNode*> funcs, std::vector<CNode*> cNodes);
 }

@@ -24,7 +24,7 @@
     {
       "label": "build & run",
       "type": "shell",
-      "command": "build/src/NodeCode",
+      "command": "build/src/NodeCode && ./out",
       "dependsOn": [
         "build"
       ],

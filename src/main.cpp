@@ -51,6 +51,19 @@ int main()
 
     CNode multiplicationNode = CNode(in,out,mParts,fill);
 
+    std::vector<std::string> pParts;
+    pParts.push_back("printf(\"%d\\n\", ");
+    pParts.push_back(");\n");
+
+    std::vector<std::string> pFill;
+    pFill.push_back("in 1");
+
+    std::vector<NodeInOut> pIn;
+    pIn.push_back(i1);
+
+    CNode printNode = CNode(in, std::vector<NodeInOut>(), pParts, pFill);
+    printNode.addInclude("stdio.h");
+
     // create const nodes
     ConstNode int3 = ConstNode(tInt, "3");
     ConstNode int5 = ConstNode(tInt, "5");
@@ -61,9 +74,6 @@ int main()
     NodeInstance* addNode = new NodeInstance(&additionNode);
     NodeInstance* mulNode = new NodeInstance(&multiplicationNode);
 
-    std::vector<NodeInOut> fIn;
-    fIn.push_back(i1);
-
     addNode->connectWith("in 2", c5Node, "out");
     mulNode->connectWith("in 1", addNode, "out");
     mulNode->connectWith("in 2", c3Node, "out");
@@ -73,6 +83,9 @@ int main()
     nodes.push_back(c5Node);
     nodes.push_back(mulNode);
     nodes.push_back(addNode);
+
+    std::vector<NodeInOut> fIn;
+    fIn.push_back(i1);
     
     std::vector<NodeInOut> fOut;
     fOut.push_back(o);
@@ -81,17 +94,25 @@ int main()
     addNode->connectWith("in 1", &fNode, "in 1");
     fNode.connectWith("out", mulNode, "out");
 
-
     NodeInstance main5 = NodeInstance(&int5);
-    NodeInstance fInst = NodeInstance(&fNode); 
+    NodeInstance fInst = NodeInstance(&fNode);
+    NodeInstance pInst = NodeInstance(&printNode); 
     fInst.connectWith("in 1", &main5, "out");
+    pInst.connectWith("in 1", &fInst, "out");
 
     std::vector<NodeInstance*> mainProg;
     mainProg.push_back(&fInst);
     mainProg.push_back(&main5);
+    mainProg.push_back(&pInst);
 
+    std::vector<FunctionNode*> funcs;
+    funcs.push_back(&fNode);
 
-    std::cout << fNode.getFunctionCode() << std::endl;
-    std::cout << NC_getCCodeFromNodes(mainProg) << std::endl;
+    std::vector<CNode*> cnodes;
+    cnodes.push_back(&printNode);
+    cnodes.push_back(&additionNode);
+    cnodes.push_back(&multiplicationNode);
+
+    NC_compileAndRun(mainProg, funcs, cnodes);
     return 0;
 }
