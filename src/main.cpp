@@ -13,9 +13,7 @@ void Addition(Node* n)
     {
         result += value->GetValue<T>();
     }
-    Value* r = new Value("result");
-    r->SetValue<T>(result);
-    n->outValues.push_back(r);
+    n->outValues[0]->SetValue<T>(result);
 }
 
 template <typename T>
@@ -28,11 +26,8 @@ void Multiply(Node* n)
     {
         result *= value->GetValue<T>();
     }
-    Value* r = new Value("result");
-    r->SetValue<T>(result);
-    n->outValues.push_back(r);
+    n->outValues[0]->SetValue<T>(result);
 }
-
 
 void LogicAnd(Node* n)
 {
@@ -43,9 +38,7 @@ void LogicAnd(Node* n)
     {
         result = result && value->GetValue<bool>();
     }
-    Value* r = new Value("result");
-    r->SetValue<bool>(result);
-    n->outValues.push_back(r);
+    n->outValues[0]->SetValue<bool>(result);
 }
 
 int main()
@@ -55,6 +48,7 @@ int main()
 
     additionNode.inValues.push_back((new Value("Value 1"))->SetValue<bool>(true));
     additionNode.inValues.push_back((new Value("Value 2"))->SetValue<bool>(true));
+    additionNode.outValues.push_back((new Value("Result")));
 
     additionNode.Run();
 

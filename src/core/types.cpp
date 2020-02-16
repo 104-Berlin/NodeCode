@@ -13,7 +13,7 @@ Value::~Value()
 {
     if (fValuePtr)
     {
-        delete fValuePtr;
+        free(fValuePtr);
         fValuePtr = nullptr;
     }
 }
@@ -25,10 +25,10 @@ Value* Value::SetValue<int>(const int& value)
     {
         fType = EType::Int;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new int;
+        fValuePtr = malloc(sizeof(int));
     }
     *((int*) fValuePtr) = value;
     return this;
@@ -41,10 +41,10 @@ Value* Value::SetValue<float>(const float& value)
     {
         fType = EType::Float;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new float;
+        fValuePtr = malloc(sizeof(float));
     }
     *((float*)fValuePtr) = value;
     return this;
@@ -57,10 +57,10 @@ Value* Value::SetValue<char>(const char& value)
     {
         fType = EType::Char;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new char;
+        fValuePtr = malloc(sizeof(char));
     }
     *((char*)fValuePtr) = value;
     return this;
@@ -73,10 +73,10 @@ Value* Value::SetValue<double>(const double& value)
     {
         fType = EType::Double;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new double;
+        fValuePtr = malloc(sizeof(double));
     }
     *((double*)fValuePtr) = value;    
     return this;
@@ -89,10 +89,10 @@ Value* Value::SetValue<long>(const long& value)
     {
         fType = EType::Long;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new long;
+        fValuePtr = malloc(sizeof(long));
     }
     *((long*)fValuePtr) = value;    
     return this;
@@ -105,10 +105,10 @@ Value* Value::SetValue<bool>(const bool& value)
     {
         fType = EType::Bool;
         if (fValuePtr) {
-            delete fValuePtr;
+            free(fValuePtr);
             fValuePtr = nullptr;
         }
-        fValuePtr = new bool;
+        fValuePtr = malloc(sizeof(bool));
     }
     *((bool*)fValuePtr) = value;    
     return this;
