@@ -27,7 +27,11 @@ namespace NodeCode
     template <typename T>
     const T& GetValue() const 
     {
-        return *((T*)fValuePtr);
+      if (!fValuePtr) {
+        printf("Could not get the value \"%s\". It is not set yet!\n", fName.c_str());
+        return T();
+      }
+      return *((T*)fValuePtr);
     }
 
   private:

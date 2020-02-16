@@ -3,7 +3,7 @@
 using namespace NodeCode;
 
 
-Value::Value(const std::string& name)
+Value:: Value(const std::string& name)
     : fName(name), fType(EType::Unknown), fValuePtr(nullptr)
 {
 

@@ -43,16 +43,24 @@ void LogicAnd(Node* n)
 
 int main()
 {
+    //Define first node
     Node additionNode;
-    additionNode.callback = LogicAnd;
+    additionNode.callback = Addition<int>;
+    additionNode.inValues.push_back((new Value("Value 1"))->SetValue<int>(2));
+    additionNode.inValues.push_back((new Value("Value 2"))->SetValue<int>(2));
+    additionNode.outValues.push_back((new Value("Addition Result")));
 
-    additionNode.inValues.push_back((new Value("Value 1"))->SetValue<bool>(true));
-    additionNode.inValues.push_back((new Value("Value 2"))->SetValue<bool>(true));
-    additionNode.outValues.push_back((new Value("Result")));
+    //Define second node
+    Node multiplyNode;
+    multiplyNode.callback = Multiply<int>;
+    multiplyNode.inValues.push_back(additionNode.outValues[0]);
+    multiplyNode.inValues.push_back((new Value("Input 2"))->SetValue<int>(4));
+    multiplyNode.outValues.push_back(new Value("MulResult"));
 
+    multiplyNode.Run();
     additionNode.Run();
 
-    bool result = additionNode.outValues[0]->GetValue<bool>();
+    int result = multiplyNode.outValues[0]->GetValue<int>();
     std::cout << "Result: " << result << std::endl;
 
     return 0;
