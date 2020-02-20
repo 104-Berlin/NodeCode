@@ -2,42 +2,8 @@
 
 using namespace NodeCode;
 
-EType GetTypeFromTypeId(const std::type_info type) 
-{
-    if (type == typeid(int)) { return EType::Int; }
-    else if (type == typeid(float)) { return EType::Float; }
-    else if (type == typeid(long)) { return EType::Long; }
-    else if (type == typeid(double)) { return EType::Double; }
-    else if (type == typeid(char)) { return EType::Char; }
-    else if (type == typeid(bool)) { return EType::Bool; } 
-
-    return EType::Unknown;
-}
-
-size_t GetSizeFromType(EType type) 
-{
-    switch (type)
-    {
-    case EType::Bool:
-        return sizeof(bool);
-    case EType::Int:
-        return sizeof(int);
-    case EType::Long:
-        return sizeof(long);
-    case EType::Float:
-        return sizeof(float);
-    case EType::Double:
-        return sizeof(double);
-    case EType::Char:
-        return sizeof(char);
-    default:
-        return 0;
-    }
-    return 0;
-}
-
-ValueBuffer::ValueBuffer()
-    : fBuffer(nullptr)
+ValueBuffer::ValueBuffer(size_t size)
+    : fBuffer(nullptr), fSize(size)
 {
     fRefCount = new size_t(1); //Set the ref count to one at the first 
 }
@@ -74,10 +40,15 @@ ValueBuffer& ValueBuffer::operator=(const ValueBuffer& other)
     fBuffer = other.fBuffer;
     fRefCount = other.fRefCount;
     (*fRefCount)++;
+    return *this;
 }
 
-template <typename T>
-void ValueBuffer::SetValue<T>(const T& value) 
+void ValueBuffer::SetValue(void* value) 
 {
-    
+    memcpy(fBuffer, value, fSize);
+}
+
+void* ValueBuffer::GetValue() const
+{
+    return fBuffer;
 }

@@ -49,7 +49,7 @@ void SelectNode(Node* n)
     
     const std::vector<Value*>& inputs = n->inValues;
     if (selectedIndex > inputs.size() - 2) {
-        n->outValues.push_back((new Value("Out value"))->SetValue<int>(0));
+        n->outValues.push_back((new Value("Out value", EType::Int))->SetValue<int>(0));
         return;
     }
     n->outValues.push_back(n->inValues[selectedIndex + 1]);
@@ -57,8 +57,16 @@ void SelectNode(Node* n)
 
 int main()
 {
-    ValueBuffer vb;
-    
+    Node testNode;
+    testNode.callback = Addition<int>;
+    testNode.inValues.push_back((new Value("In Value 1", EType::Int))->SetValue<int>(3));
+    testNode.inValues.push_back((new Value("In Value 1", EType::Int))->SetValue<int>(3));
+    testNode.outValues.push_back(new Value("Out value", EType::Int));
+
+    testNode.Run();
+
+    int result = testNode.outValues[0]->GetValue<int>();
+    std::cout << "Result: " << result << std::endl;
 
     return 0;
 }
