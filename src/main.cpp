@@ -41,27 +41,24 @@ void LogicAnd(Node* n)
     n->outValues[0]->SetValue<bool>(result);
 }
 
+void SelectNode(Node* n) 
+{
+    int selectedIndex = n->inValues[0]->GetValue<int>();
+
+    std::cout << selectedIndex << std::endl;
+    
+    const std::vector<Value*>& inputs = n->inValues;
+    if (selectedIndex > inputs.size() - 2) {
+        n->outValues.push_back((new Value("Out value"))->SetValue<int>(0));
+        return;
+    }
+    n->outValues.push_back(n->inValues[selectedIndex + 1]);
+}
+
 int main()
 {
-    //Define first node
-    Node additionNode;
-    additionNode.callback = Addition<int>;
-    additionNode.inValues.push_back((new Value("Value 1"))->SetValue<int>(2));
-    additionNode.inValues.push_back((new Value("Value 2"))->SetValue<int>(2));
-    additionNode.outValues.push_back((new Value("Addition Result")));
-
-    //Define second node
-    Node multiplyNode;
-    multiplyNode.callback = Multiply<int>;
-    multiplyNode.inValues.push_back(additionNode.outValues[0]);
-    multiplyNode.inValues.push_back((new Value("Input 2"))->SetValue<int>(4));
-    multiplyNode.outValues.push_back(new Value("MulResult"));
-
-    multiplyNode.Run();
-    additionNode.Run();
-
-    int result = multiplyNode.outValues[0]->GetValue<int>();
-    std::cout << "Result: " << result << std::endl;
+    ValueBuffer vb;
+    
 
     return 0;
 }

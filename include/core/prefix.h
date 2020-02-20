@@ -7,5 +7,6 @@
 #include <iostream>
 #include <functional>
 
+#include "value_buffer.h"
 #include "types.h"
 #include "node.h"
