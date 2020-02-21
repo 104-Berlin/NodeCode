@@ -49,24 +49,35 @@ void SelectNode(Node* n)
     
     const std::vector<Value*>& inputs = n->inValues;
     if (selectedIndex > inputs.size() - 2) {
-        n->outValues.push_back((new Value("Out value", EType::Int))->SetValue<int>(0));
+        n->outValues.push_back((new Value("Out value"))->SetValue<int>(0));
         return;
     }
-    n->outValues.push_back(n->inValues[selectedIndex + 1]);
+    n->outValues[0] = n->inValues[selectedIndex + 1];
 }
 
 int main()
 {
-    Node testNode;
-    testNode.callback = Addition<int>;
-    testNode.inValues.push_back((new Value("In Value 1", EType::Int))->SetValue<int>(3));
-    testNode.inValues.push_back((new Value("In Value 1", EType::Int))->SetValue<int>(3));
-    testNode.outValues.push_back(new Value("Out value", EType::Int));
+    Node selectNode;
+    selectNode.callback = SelectNode;
+    selectNode.inValues.push_back((new Value("In Value 1"))->SetValue<int>(1));
+    selectNode.inValues.push_back((new Value("In Value 1"))->SetValue<int>(3));
+    selectNode.inValues.push_back((new Value("In Value 1"))->SetValue<int>(1));
+    selectNode.outValues.push_back(nullptr);
 
-    testNode.Run();
+    selectNode.Run();
 
-    int result = testNode.outValues[0]->GetValue<int>();
+    Node secondNode;
+    secondNode.callback = Addition<int>;
+    secondNode.inValues.push_back((new Value("Addition value"))->SetValue<int>(4));
+    secondNode.inValues.push_back(selectNode.outValues[0]);
+    secondNode.outValues.push_back(new Value("Out value"));
+
+    secondNode.Run();
+
+    int result = secondNode.outValues[0]->GetValue<int>();
     std::cout << "Result: " << result << std::endl;
+
+    GarbageCollector::CleanUp();
 
     return 0;
 }

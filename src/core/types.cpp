@@ -36,12 +36,13 @@ size_t NodeCode::GetSizeFromType(EType type)
     return 0;
 }
 
-Value:: Value(const std::string& name, EType type)
-    : fName(name), fType(type), fValueBuffer(GetSizeFromType(type))
+Value:: Value(const std::string& name)
+    : fName(name), fType(EType::Unknown), fBuffer(nullptr)
 {
 
 }
 
 Value::~Value()
 {
+    free(fBuffer);
 }

@@ -20,15 +20,24 @@ namespace NodeCode
   class Value
   {
   public:
-    Value(const std::string& name, EType type);
+    Value(const std::string& name);
     virtual ~Value();
 
     template<typename T>
     Value* SetValue(const T& value)
     {
         EType type = GetTypeFromTypeId(typeid(T));
-        if (type != fType) { printf("Wrong type to set the value!"); return nullptr; }
-        fValueBuffer.SetValue((void*) &value);
+        fType = type;
+        size_t bufferSize = GetSizeFromType(fType);
+        if (type != fType && !fBuffer) 
+        { 
+          free(fBuffer);
+        }
+        if (!fBuffer)
+        {
+          fBuffer = malloc(bufferSize);
+        }
+        memcpy(fBuffer, &value, bufferSize);
         return this;
     }
 
@@ -37,12 +46,12 @@ namespace NodeCode
     {
         EType type = GetTypeFromTypeId(typeid(T));
         if (type != fType) { printf("Wrong type to get the value!"); }
-        return *((T*)fValueBuffer.GetValue());
+        return *((T*)fBuffer);
     }
 
   private:
     std::string fName;
-    ValueBuffer fValueBuffer;
+    void* fBuffer;
     EType fType;
   };
 
