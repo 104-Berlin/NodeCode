@@ -2,8 +2,8 @@
 
 //Clean this
 #include <vector>
-#include <memory>
 #include <string>
+#include <memory>
 #include <iostream>
 #include <functional>
 
