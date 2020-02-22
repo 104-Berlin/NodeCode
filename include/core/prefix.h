@@ -1,9 +1,10 @@
 #pragma once
 
 //Clean this
+#include <cstring>
+#include <memory>
 #include <vector>
 #include <string>
-#include <memory>
 #include <iostream>
 #include <functional>
 
