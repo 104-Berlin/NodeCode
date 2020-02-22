@@ -37,7 +37,7 @@ namespace NodeCode
         {
           fBuffer = malloc(bufferSize);
         }
-        memcpy(fBuffer, &value, bufferSize);
+        
         return this;
     }
 
