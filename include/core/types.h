@@ -45,7 +45,8 @@ namespace NodeCode
     const T& GetValue() const 
     {
         EType type = GetTypeFromTypeId(typeid(T));
-        if (type != fType) { printf("Wrong type to get the value!"); }
+        if (type != fType) { printf("Wrong type to get the value!\n"); }
+        if (!fBuffer) { printf("The value was never set. This is going to crash the programm!\n"); }
         return *((T*)fBuffer);
     }
 

@@ -37,9 +37,11 @@ size_t NodeCode::GetSizeFromType(EType type)
 }
 
 Value:: Value(const std::string& name)
-    : fName(name), fType(EType::Unknown), fBuffer(nullptr)
+    : fName(name), fType(EType::Int), fBuffer(nullptr   )
 {
-
+    size_t bufferSize = GetSizeFromType(fType);
+    fBuffer = malloc(bufferSize);
+    memset(fBuffer, 0, bufferSize);
 }
 
 Value::~Value()
