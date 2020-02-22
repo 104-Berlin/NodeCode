@@ -76,6 +76,6 @@ int main()
     std::cout << "Result: " << result << std::endl;
 
     GarbageCollector::CleanUp();
-
+asd
     return 0;
 }
