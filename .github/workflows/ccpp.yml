@@ -10,6 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: mkdir bulid && cd build && cmake ..
-    - name: make
-      run: make
+      run: mkdir build && cd build && cmake ..
+    - name: build
+      run: make build
