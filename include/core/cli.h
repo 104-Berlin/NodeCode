@@ -13,8 +13,10 @@ class CLI {
  public:
   void add();
   void addType();
+  void addConst();
   void get();
   void getTypes();
+  void getConst();
   void run();
   string getLine();
   string getName();

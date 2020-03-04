@@ -4,14 +4,14 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
     {
       "name": "(lldb) Anfügen",
       "type": "cppdbg",
       "request": "attach",
       "program": "${workspaceFolder}/build/src/NodeCode",
       "processId": "${command:pickProcess}",
-      "MIMode": "lldb"
+      "MIMode": "lldb",
+      "visualizerFile": "/Users/valentinstocker/Library/Application Support/Code - Insiders/User/workspaceStorage/8a7e9d3243fc2a0bfd5ae0288fec9e43/tonka3000.qtvsctools/qt.natvis.xml"
     },
     {
       "name": "gdb) Starten",
@@ -23,7 +23,8 @@
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "gdb"
+      "MIMode": "gdb",
+      "visualizerFile": "/Users/valentinstocker/Library/Application Support/Code - Insiders/User/workspaceStorage/8a7e9d3243fc2a0bfd5ae0288fec9e43/tonka3000.qtvsctools/qt.natvis.xml"
     }
   ]
 }

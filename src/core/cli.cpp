@@ -40,12 +40,40 @@ void CLI::addType() {
   }
 }
 
+void CLI::addConst() {
+  string in;
+  Type* cType;
+  while (true) {
+    putLine("Enter Typname or ?");
+    in = getLine();
+    if (in == "?") {
+      getTypes();
+    } else if (fTypes.find(in) != fTypes.end()) {
+      cType = fTypes.find(in)->second;
+      break;
+    } else {
+      putLine("Type " + in + " doesn't exist");
+    }
+  }
+  while (true) {
+    putLine("Enter const");
+    string cons = getLine();
+    if (fConst.find(in + "." + cons) == fConst.end()) {
+      fConst[in + "." + cons] = new ConstNode(cType, cons);
+      break;
+    }
+    putLine("Const " + in + "." + cons + " exists already");
+  }
+}
+
 void CLI::add() {
   while (true) {
     putLine("add > type q");
     string action = getLine();
     if (action == "type") {
       addType();
+    } else if(action == "const") {
+      addConst();
     } else if (action == "q") {
       return;
     }
@@ -54,25 +82,23 @@ void CLI::add() {
 
 void CLI::putLine(string line) { std::cout << line << std::endl; }
 
-string CLI::getName() {
-  return getLine();
-}
+string CLI::getName() { return getLine(); }
 
 string CLI::getLine() {
   string in;
   while (true) {
     std::getline(std::cin, in);
     size_t spaceIndex = in.find_first_of(' ');
-    if(spaceIndex > 0){
+    if (spaceIndex > 0) {
       putLine("-----------------------------------");
-      return in.substr(0,spaceIndex);
+      return in.substr(0, spaceIndex);
     }
   }
 }
 
 void CLI::getTypes() {
   for (pair<string, Type*> p : fTypes) {
-    putLine(p.first+" : "+ p.second->getCType());
+    putLine(p.first + " : " + p.second->getCType());
   }
 }
 
