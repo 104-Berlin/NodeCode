@@ -10,4 +10,3 @@
 
 #include "types.h"
 #include "node.h"
-#include "garbage_collector.h"

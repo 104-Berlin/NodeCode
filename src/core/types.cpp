@@ -36,15 +36,12 @@ size_t NodeCode::GetSizeFromType(EType type)
     return 0;
 }
 
-Value:: Value(const std::string& name)
-    : fName(name), fType(EType::Int), fBuffer(nullptr   )
+Connection:: Connection(EType type)
+    : fType(type), fBuffer(nullptr)
 {
-    size_t bufferSize = GetSizeFromType(fType);
-    fBuffer = malloc(bufferSize);
-    memset(fBuffer, 0, bufferSize);
 }
 
-Value::~Value()
+Connection::~Connection()
 {
-    free(fBuffer);
+    if (fBuffer) { free(fBuffer); }
 }

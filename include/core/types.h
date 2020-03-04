@@ -17,14 +17,20 @@ namespace NodeCode
   extern EType GetTypeFromTypeId(const std::type_info& type);
   extern size_t GetSizeFromType(EType type);
 
-  class Value
+  struct ValueDescription
+  { 
+    std::string Name;
+    EType Type;
+  };
+
+  class Connection
   {
   public:
-    Value(const std::string& name);
-    virtual ~Value();
+    Connection(EType type);
+    virtual ~Connection();
 
     template<typename T>
-    Value* SetValue(const T& value)
+    Connection* SetValue(const T& value)
     {
         EType type = GetTypeFromTypeId(typeid(T));
         fType = type;
@@ -51,7 +57,6 @@ namespace NodeCode
     }
 
   private:
-    std::string fName;
     void* fBuffer;
     EType fType;
   };

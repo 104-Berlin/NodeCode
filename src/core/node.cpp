@@ -2,7 +2,16 @@
 
 using namespace NodeCode;
 
-Node::~Node()
+NodeInstance::NodeInstance(NodeDescription* nodeDsc)
+    : fNodeDsc(nodeDsc)
+{
+    for (const ValueDescription& valueDsc : nodeDsc->Outputs)
+    {
+        outValues.push_back(Connection(valueDsc.Type));
+    }
+}
+
+NodeInstance::~NodeInstance()
 {
     inValues.clear();
     outValues.clear();
